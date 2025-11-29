@@ -115,6 +115,111 @@ body {
     display: none;
 }
 
+
+/* Ajoutez ces styles dans styles.css après les styles du header existants */
+
+/* Navigation principale */
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
+    justify-content: center;
+}
+
+.main-nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    padding: 0.5rem 0;
+}
+
+.main-nav a:hover {
+    color: var(--accent-primary);
+}
+
+/* Dropdown menu */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: var(--bg-secondary);
+    min-width: 200px;
+    box-shadow: var(--shadow-lg);
+    border-radius: 8px;
+    z-index: 1000;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.dropdown-content a {
+    color: var(--text-primary);
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background: var(--bg-tertiary);
+    color: var(--accent-primary);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-container {
+        flex-wrap: wrap;
+    }
+    
+    .main-nav {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 1rem;
+        margin-top: 1rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+    
+    .dropdown-content {
+        position: fixed;
+        left: 0;
+        right: 0;
+        margin: 0;
+        border-radius: 0;
+    }
+}
+
+
+
 /* Main Content */
 .main-content {
     min-height: calc(100vh - 80px);
