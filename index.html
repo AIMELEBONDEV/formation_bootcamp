@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform - Formations Professionnelles</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VOTRE-ID-ICI"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VOTRE-ID-ICI');
+    </script>
+</head>
+<body class="light-mode">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>Learning Platform</h1>
+                <p class="tagline">Formations professionnelles</p>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home View -->
+        <div id="homeView" class="view active">
+            <div class="container">
+                <div class="hero-section">
+                    <h2 class="hero-title">Développez vos compétences</h2>
+                    <p class="hero-description">Formations structurées pour maîtriser la programmation et l'analyse de données</p>
+                </div>
+
+                <div class="courses-grid" id="coursesGrid">
+                    <!-- Courses will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Course View -->
+        <div id="courseView" class="view">
+            <div class="course-layout">
+                <!-- Sidebar -->
+                <aside class="sidebar" id="sidebar">
+                    <div class="sidebar-header">
+                        <button class="back-btn" id="backBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                            Retour
+                        </button>
+                        <h3 class="course-title" id="sidebarCourseTitle"></h3>
+                    </div>
+                    
+                    <div class="progress-section">
+                        <div class="progress-label">Progression</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="courseProgress"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">0%</div>
+                    </div>
+
+                    <div class="sidebar-content" id="sidebarContent">
+                        <!-- Week navigation will be loaded here -->
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="content-area">
+                    <div class="content-header">
+                        <div>
+                            <h2 id="contentTitle">Chargement...</h2>
+                            <p id="contentSubtitle" class="content-subtitle"></p>
+                        </div>
+                        <button class="btn-secondary" id="resetCourseBtn">
+                            Réinitialiser la progression
+                        </button>
+                    </div>
+
+                    <div class="lesson-content" id="lessonContent">
+                        <!-- Lesson content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
+    <!-- Popup d'inscription -->
+    <div id="subscriptionPopup" class="popup-overlay">
+        <div class="popup-content">
+            <button class="popup-close" id="closePopup">&times;</button>
+            <h2>Restez informé des nouveaux cours</h2>
+            <p>Inscrivez-vous pour recevoir les mises à jour et les nouveaux contenus de formation.</p>
+            <iframe src="VOTRE-URL-GOOGLE-FORM-ICI" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Chargement…</iframe>
+        </div>
+    </div>
+
+    <script>
+    // Gestion du popup d'inscription
+    (function() {
+        const popup = document.getElementById('subscriptionPopup');
+        const closeBtn = document.getElementById('closePopup');
+        const POPUP_DELAY = 30000; // 30 secondes
+        const POPUP_SHOWN_KEY = 'popupShown';
+        const WEEK_COMPLETED_KEY = 'weekCompleted';
+        
+        // Vérifier si le popup a déjà été montré
+        function hasSeenPopup() {
+            return localStorage.getItem(POPUP_SHOWN_KEY) === 'true';
+        }
+        
+        // Marquer le popup comme vu
+        function markPopupAsSeen() {
+            localStorage.setItem(POPUP_SHOWN_KEY, 'true');
+        }
+        
+        // Afficher le popup
+        function showPopup() {
+            if (!hasSeenPopup()) {
+                popup.style.display = 'flex';
+                markPopupAsSeen();
+            }
+        }
+        
+        // Fermer le popup
+        function hidePopup() {
+            popup.style.display = 'none';
+        }
+        
+        // Popup après 30 secondes
+        setTimeout(showPopup, POPUP_DELAY);
+        
+        // Fermer au clic sur X
+        closeBtn.addEventListener('click', hidePopup);
+        
+        // Fermer au clic sur l'overlay
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup) {
+                hidePopup();
+            }
+        });
+        
+        // Popup quand une semaine est complétée (hook dans le système de progression)
+        window.addEventListener('weekCompleted', function() {
+            if (!hasSeenPopup()) {
+                showPopup();
+            }
+        });
+    })();
+    </script>

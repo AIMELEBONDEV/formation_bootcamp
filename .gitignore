@@ -1,0 +1,75 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Éditeurs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dépendances
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build
+dist/
+build/
+*.min.js
+*.min.css
+
+# Environnement
+.env
+.env.local
+.env.*.local
+
+# Fichiers temporaires
+*.tmp
+*.temp
+.cache/
+
+# Sauvegardes
+*.bak
+*.backup
+*~
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Python (si vous générez du contenu)
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.Python
+venv/
+env/
+*.egg-info/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Fichiers de test
+test/
+tests/
+*.test.js
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Documentation générée
+docs/_build/
+site/

@@ -1,0 +1,60 @@
+{
+  "platform": {
+    "name": "Learning Platform",
+    "tagline": "Formations professionnelles en développement et data"
+  },
+  "courses": [
+    {
+      "id": "python-bootcamp",
+      "title": "Python Bootcamp",
+      "description": "Apprenez Python de A à Z avec introduction et conclusion",
+      "duration": "6 sections",
+      "level": "Débutant à Intermédiaire",
+      "icon": "code",
+      "color": "#3776AB",
+      "weeks": 6,
+      "totalSections": 582,
+      "status": "active",
+      "contentFile": "courses/python-bootcamp.json"
+    },
+    {
+      "id": "sql-bootcamp",
+      "title": "SQL Bootcamp",
+      "description": "Maîtrisez les bases de données SQL",
+      "duration": "3 semaines",
+      "level": "Débutant",
+      "icon": "database",
+      "color": "#F29111",
+      "weeks": 3,
+      "totalSections": 0,
+      "status": "coming-soon",
+      "contentFile": "courses/sql-bootcamp.json"
+    },
+    {
+      "id": "powerbi-bootcamp",
+      "title": "Power BI",
+      "description": "Créez des tableaux de bord professionnels",
+      "duration": "3 semaines",
+      "level": "Débutant à Intermédiaire",
+      "icon": "chart",
+      "color": "#F2C811",
+      "weeks": 3,
+      "totalSections": 0,
+      "status": "coming-soon",
+      "contentFile": "courses/powerbi-bootcamp.json"
+    },
+    {
+      "id": "python-projects",
+      "title": "Projets Python",
+      "description": "Projets pratiques pour consolider vos compétences",
+      "duration": "Flexible",
+      "level": "Intermédiaire",
+      "icon": "folder",
+      "color": "#4B8BBE",
+      "weeks": 0,
+      "totalSections": 0,
+      "status": "coming-soon",
+      "contentFile": "courses/python-projects.json"
+    }
+  ]
+}
