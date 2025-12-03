@@ -1,4 +1,7 @@
-// Application State
+// ========================================
+// APPLICATION STATE
+// ========================================
+
 const APP = {
     currentCourse: null,
     currentWeek: null,
@@ -8,16 +11,23 @@ const APP = {
     theme: 'light'
 };
 
-// Initialize Application
+// ========================================
+// INITIALIZATION
+// ========================================
+
 document.addEventListener('DOMContentLoaded', async () => {
     loadTheme();
     loadProgress();
     await loadCourses();
     setupEventListeners();
     displayCourses();
+    initMobileMenu();
 });
 
-// Theme Management
+// ========================================
+// THEME MANAGEMENT
+// ========================================
+
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     APP.theme = savedTheme;
@@ -30,7 +40,10 @@ function toggleTheme() {
     localStorage.setItem('theme', APP.theme);
 }
 
-// Progress Management
+// ========================================
+// PROGRESS MANAGEMENT
+// ========================================
+
 function loadProgress() {
     const saved = localStorage.getItem('learningProgress');
     if (saved) {
@@ -49,7 +62,10 @@ function getCourseProgress(courseId) {
     return APP.progress[courseId];
 }
 
-// Load Courses Configuration
+// ========================================
+// COURSES LOADING
+// ========================================
+
 async function loadCourses() {
     try {
         const response = await fetch('courses.json');
@@ -60,7 +76,10 @@ async function loadCourses() {
     }
 }
 
-// Display Courses Grid
+// ========================================
+// HOME VIEW
+// ========================================
+
 function displayCourses() {
     const grid = document.getElementById('coursesGrid');
     grid.innerHTML = '';
@@ -102,7 +121,17 @@ function displayCourses() {
     });
 }
 
-// Open Course
+function showHomeView() {
+    showView('homeView');
+    APP.currentCourse = null;
+    APP.currentWeek = null;
+    APP.courseData = null;
+}
+
+// ========================================
+// COURSE VIEW
+// ========================================
+
 async function openCourse(course) {
     APP.currentCourse = course;
     
@@ -113,9 +142,10 @@ async function openCourse(course) {
         showView('courseView');
         setupCourseSidebar();
         
-        // Display first week by default
         const firstWeek = Object.keys(APP.courseData)[0];
         displayWeek(firstWeek);
+        
+        initMobileSidebar();
         
     } catch (error) {
         console.error('Error loading course content:', error);
@@ -123,7 +153,17 @@ async function openCourse(course) {
     }
 }
 
-// Setup Course Sidebar
+async function openCourseByName(courseName) {
+    const course = APP.courses.find(c => c.id === courseName);
+    if (course && course.status === 'active') {
+        await openCourse(course);
+    } else if (course && course.status === 'coming-soon') {
+        alert('Cette formation sera bientôt disponible !');
+    } else {
+        alert('Formation non trouvée');
+    }
+}
+
 function setupCourseSidebar() {
     const title = document.getElementById('sidebarCourseTitle');
     title.textContent = APP.currentCourse.title;
@@ -156,7 +196,10 @@ function setupCourseSidebar() {
     });
 }
 
-// Extract sections from week data (based on markdown titles)
+// ========================================
+// SECTIONS EXTRACTION
+// ========================================
+
 function extractSections(weekData) {
     const sections = [];
     let currentSection = null;
@@ -166,11 +209,9 @@ function extractSections(weekData) {
             const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
             const lines = source.split('\n');
             
-            // Look for titles (# ## ### ####)
             for (let line of lines) {
                 const trimmed = line.trim();
                 if (trimmed.startsWith('####') || trimmed.startsWith('###') || trimmed.startsWith('##')) {
-                    // Extract title without markdown symbols and links
                     let title = trimmed.replace(/^#+\s*/, '');
                     title = title.replace(/<a[^>]*>.*?<\/a>/g, '');
                     title = title.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
@@ -197,7 +238,10 @@ function extractSections(weekData) {
     return sections;
 }
 
-// Calculate Week Progress
+// ========================================
+// PROGRESS CALCULATION
+// ========================================
+
 function calculateWeekProgress(weekNumber) {
     const courseProgress = getCourseProgress(APP.currentCourse.id);
     const weekData = APP.courseData[weekNumber];
@@ -219,7 +263,6 @@ function calculateWeekProgress(weekNumber) {
     return Math.round((completedSections / sections.length) * 100);
 }
 
-// Calculate Overall Course Progress
 function calculateCourseProgress() {
     const courseProgress = getCourseProgress(APP.currentCourse.id);
     let totalSections = 0;
@@ -243,30 +286,51 @@ function calculateCourseProgress() {
     return totalSections > 0 ? Math.round((completedSections / totalSections) * 100) : 0;
 }
 
-// Display Week Content
+function updateProgressDisplay() {
+    const progress = calculateCourseProgress();
+    
+    document.getElementById('courseProgress').style.width = `${progress}%`;
+    document.getElementById('progressText').textContent = `${progress}%`;
+    
+    Object.keys(APP.courseData).forEach(weekNumber => {
+        const weekProgress = calculateWeekProgress(weekNumber);
+        const weekElement = document.querySelector(`[data-week="${weekNumber}"] .week-progress`);
+        if (weekElement) {
+            weekElement.textContent = `${weekProgress}%`;
+        }
+    });
+}
+
+// ========================================
+// WEEK DISPLAY
+// ========================================
+
 function displayWeek(weekNumber) {
     APP.currentWeek = weekNumber;
     const weekData = APP.courseData[weekNumber];
     
-    // Update active week in sidebar
     document.querySelectorAll('.week-header').forEach(header => {
         header.classList.remove('active');
     });
     document.querySelector(`[data-week="${weekNumber}"]`).classList.add('active');
     
-    // Update content header
     const sections = extractSections(weekData);
     document.getElementById('contentTitle').textContent = weekData.title;
     document.getElementById('contentSubtitle').textContent = `${sections.length} sections`;
     
-    // Render content
     renderWeekContent(weekNumber, weekData);
-    
-    // Update progress
     updateProgressDisplay();
+    
+    // Fermer la sidebar sur mobile après sélection
+    if (window.innerWidth <= 768) {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+            sidebar.classList.add('collapsed');
+            sidebar.classList.remove('expanded');
+        }
+    }
 }
 
-// Render Week Content
 function renderWeekContent(weekNumber, weekData) {
     const container = document.getElementById('lessonContent');
     container.innerHTML = '';
@@ -282,7 +346,6 @@ function renderWeekContent(weekNumber, weekData) {
         sectionDiv.className = `section-item ${isCompleted ? 'completed' : ''}`;
         sectionDiv.dataset.sectionId = sectionId;
         
-        // Section header with checkbox
         const header = document.createElement('div');
         header.className = 'section-header';
         
@@ -301,7 +364,6 @@ function renderWeekContent(weekNumber, weekData) {
         header.appendChild(label);
         sectionDiv.appendChild(header);
         
-        // Section content
         const content = document.createElement('div');
         content.className = 'section-content';
         
@@ -318,7 +380,10 @@ function renderWeekContent(weekNumber, weekData) {
     });
 }
 
-// Render Markdown Cell
+// ========================================
+// RENDERING
+// ========================================
+
 function renderMarkdown(cell) {
     const div = document.createElement('div');
     div.className = 'markdown-content';
@@ -333,7 +398,6 @@ function renderMarkdown(cell) {
     return div;
 }
 
-// Render Code Cell
 function renderCode(cell) {
     const container = document.createElement('div');
     container.className = 'code-block';
@@ -367,7 +431,6 @@ function renderCode(cell) {
     codeContent.appendChild(pre);
     container.appendChild(codeContent);
     
-    // Add outputs if available
     if (cell.outputs && cell.outputs.length > 0) {
         cell.outputs.forEach(output => {
             const outputDiv = renderOutput(output);
@@ -377,7 +440,6 @@ function renderCode(cell) {
         });
     }
     
-    // Highlight code
     setTimeout(() => {
         hljs.highlightElement(code);
     }, 0);
@@ -385,7 +447,6 @@ function renderCode(cell) {
     return container;
 }
 
-// Render Output
 function renderOutput(output) {
     const div = document.createElement('div');
     div.className = 'output-block';
@@ -421,7 +482,10 @@ function renderOutput(output) {
     return div;
 }
 
-// Toggle Section
+// ========================================
+// SECTION TOGGLE
+// ========================================
+
 function toggleSection(sectionId, isCompleted) {
     const courseProgress = getCourseProgress(APP.currentCourse.id);
     courseProgress[sectionId] = isCompleted;
@@ -438,34 +502,14 @@ function toggleSection(sectionId, isCompleted) {
     
     updateProgressDisplay();
     
-    // Vérifier si la semaine est complétée à 100%
     if (isCompleted && APP.currentWeek) {
         const weekProgress = calculateWeekProgress(APP.currentWeek);
         if (weekProgress === 100) {
-            // Déclencher l'événement de semaine complétée
             window.dispatchEvent(new Event('weekCompleted'));
         }
     }
 }
 
-// Update Progress Display
-function updateProgressDisplay() {
-    const progress = calculateCourseProgress();
-    
-    document.getElementById('courseProgress').style.width = `${progress}%`;
-    document.getElementById('progressText').textContent = `${progress}%`;
-    
-    // Update week progress in sidebar
-    Object.keys(APP.courseData).forEach(weekNumber => {
-        const weekProgress = calculateWeekProgress(weekNumber);
-        const weekElement = document.querySelector(`[data-week="${weekNumber}"] .week-progress`);
-        if (weekElement) {
-            weekElement.textContent = `${weekProgress}%`;
-        }
-    });
-}
-
-// Reset Course Progress
 function resetCourseProgress() {
     if (confirm('Êtes-vous sûr de vouloir réinitialiser votre progression pour ce cours ?')) {
         APP.progress[APP.currentCourse.id] = {};
@@ -483,7 +527,10 @@ function resetCourseProgress() {
     }
 }
 
-// View Management
+// ========================================
+// VIEW MANAGEMENT
+// ========================================
+
 function showView(viewId) {
     document.querySelectorAll('.view').forEach(view => {
         view.classList.remove('active');
@@ -498,80 +545,106 @@ function goHome() {
     APP.courseData = null;
 }
 
-// Event Listeners
+// ========================================
+// MOBILE MENU
+// ========================================
+
+function initMobileMenu() {
+    if (window.innerWidth <= 768) {
+        const header = document.querySelector('.header-container');
+        const nav = document.querySelector('.main-nav');
+        
+        if (!nav) return;
+        
+        nav.style.display = 'none';
+        
+        if (!document.querySelector('.hamburger-menu')) {
+            const hamburger = document.createElement('button');
+            hamburger.className = 'hamburger-menu';
+            hamburger.innerHTML = '☰';
+            hamburger.setAttribute('aria-label', 'Menu');
+            
+            const logo = document.querySelector('.logo');
+            header.insertBefore(hamburger, logo);
+            
+            hamburger.addEventListener('click', function() {
+                if (nav.style.display === 'none' || nav.style.display === '') {
+                    nav.style.display = 'flex';
+                    hamburger.innerHTML = '✕';
+                } else {
+                    nav.style.display = 'none';
+                    hamburger.innerHTML = '☰';
+                }
+            });
+            
+            const navLinks = nav.querySelectorAll('a:not(.dropbtn)');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    nav.style.display = 'none';
+                    hamburger.innerHTML = '☰';
+                });
+            });
+            
+            const dropdown = document.querySelector('.dropdown');
+            const dropbtn = document.querySelector('.dropbtn');
+            
+            if (dropdown && dropbtn) {
+                dropbtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                });
+            }
+        }
+    }
+    
+    window.addEventListener('resize', function() {
+        const nav = document.querySelector('.main-nav');
+        if (nav) {
+            if (window.innerWidth > 768) {
+                nav.style.display = 'flex';
+            } else {
+                nav.style.display = 'none';
+            }
+        }
+    });
+}
+
+// ========================================
+// MOBILE SIDEBAR
+// ========================================
+
+function initMobileSidebar() {
+    if (window.innerWidth <= 768) {
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarHeader = document.querySelector('.sidebar-header');
+        const sidebarContent = document.querySelector('.sidebar-content');
+        
+        if (sidebar && sidebarHeader && sidebarContent) {
+            sidebar.classList.add('collapsed');
+            
+            sidebarHeader.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                sidebar.classList.toggle('expanded');
+            });
+        }
+    }
+}
+
+// ========================================
+// EVENT LISTENERS
+// ========================================
+
 function setupEventListeners() {
     document.getElementById('themeToggle').addEventListener('click', toggleTheme);
     document.getElementById('backBtn').addEventListener('click', goHome);
     document.getElementById('resetCourseBtn').addEventListener('click', resetCourseProgress);
 }
 
-// Marked.js Configuration
+// ========================================
+// MARKED.JS CONFIG
+// ========================================
+
 marked.setOptions({
     breaks: true,
     gfm: true
-});
-
-
-// AJOUTEZ CE CODE DANS app.js pour le menu mobile
-
-// Menu hamburger mobile
-document.addEventListener('DOMContentLoaded', function() {
-    // Créer le bouton hamburger
-    const header = document.querySelector('.header-container');
-    const nav = document.querySelector('.main-nav');
-    
-    if (window.innerWidth <= 768) {
-        // Cacher le menu par défaut sur mobile
-        nav.style.display = 'none';
-        
-        // Créer bouton hamburger
-        const hamburger = document.createElement('button');
-        hamburger.className = 'hamburger-menu';
-        hamburger.innerHTML = '☰';
-        hamburger.setAttribute('aria-label', 'Menu');
-        
-        // Insérer avant header-actions
-        const headerActions = document.querySelector('.header-actions');
-        header.insertBefore(hamburger, headerActions);
-        
-        // Toggle menu
-        hamburger.addEventListener('click', function() {
-            if (nav.style.display === 'none' || nav.style.display === '') {
-                nav.style.display = 'flex';
-                hamburger.innerHTML = '✕';
-            } else {
-                nav.style.display = 'none';
-                hamburger.innerHTML = '☰';
-            }
-        });
-        
-        // Fermer le menu quand on clique sur un lien
-        const navLinks = nav.querySelectorAll('a:not(.dropbtn)');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                nav.style.display = 'none';
-                hamburger.innerHTML = '☰';
-            });
-        });
-        
-        // Gérer les dropdowns sur mobile
-        const dropdown = document.querySelector('.dropdown');
-        const dropbtn = document.querySelector('.dropbtn');
-        
-        if (dropdown && dropbtn) {
-            dropbtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                dropdown.classList.toggle('active');
-            });
-        }
-    }
-    
-    // Réafficher le menu sur desktop
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            nav.style.display = 'flex';
-        } else {
-            nav.style.display = 'none';
-        }
-    });
 });
