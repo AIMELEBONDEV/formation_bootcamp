@@ -1170,3 +1170,47 @@ body {
         font-size: 16px;
     }
 }
+
+/* Ajoutez ces styles dans styles.css pour les cours HTML */
+
+.html-course-content {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.html-course-content h1,
+.html-course-content h2,
+.html-course-content h3 {
+    color: var(--text-primary);
+    margin: 2rem 0 1rem;
+}
+
+.html-course-content p {
+    color: var(--text-primary);
+    line-height: 1.8;
+    margin: 1rem 0;
+}
+
+.html-course-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.html-course-content a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.html-course-content a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .html-course-content {
+        padding: 1rem;
+    }
+}

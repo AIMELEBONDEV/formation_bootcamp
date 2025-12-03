@@ -164,6 +164,76 @@ async function openCourseByName(courseName) {
     }
 }
 
+// Ajoutez cette fonction dans app.js après la fonction openCourse
+
+// Détecter le type de fichier et charger en conséquence
+async function openCourse(course) {
+    APP.currentCourse = course;
+    
+    try {
+        const fileExtension = course.contentFile.split('.').pop().toLowerCase();
+        
+        if (fileExtension === 'html') {
+            // Charger le contenu HTML
+            const response = await fetch(course.contentFile);
+            const htmlContent = await response.text();
+            
+            showView('courseView');
+            displayHTMLCourse(htmlContent);
+            
+        } else {
+            // Charger le JSON (Jupyter Notebook)
+            const response = await fetch(course.contentFile);
+            APP.courseData = await response.json();
+            
+            showView('courseView');
+            setupCourseSidebar();
+            
+            const firstWeek = Object.keys(APP.courseData)[0];
+            displayWeek(firstWeek);
+            
+            initMobileSidebar();
+        }
+        
+    } catch (error) {
+        console.error('Error loading course content:', error);
+        alert('Impossible de charger le contenu du cours.');
+    }
+}
+
+// Afficher un cours HTML
+function displayHTMLCourse(htmlContent) {
+    // Cacher la sidebar
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+        sidebar.style.display = 'none';
+    }
+    
+    // Afficher le contenu HTML
+    const contentArea = document.querySelector('.content-area');
+    contentArea.innerHTML = `
+        <div class="content-header">
+            <div>
+                <h2>${APP.currentCourse.title}</h2>
+                <p class="content-subtitle">Formation HTML</p>
+            </div>
+        </div>
+        <div class="html-course-content">
+            ${htmlContent}
+        </div>
+    `;
+    
+    // Réafficher la sidebar si on revient à un cours JSON
+    const originalGoHome = goHome;
+    window.goHome = function() {
+        if (sidebar) {
+            sidebar.style.display = '';
+        }
+        originalGoHome();
+    };
+}
+
+
 function setupCourseSidebar() {
     const title = document.getElementById('sidebarCourseTitle');
     title.textContent = APP.currentCourse.title;
