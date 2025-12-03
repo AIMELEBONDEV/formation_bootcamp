@@ -511,3 +511,67 @@ marked.setOptions({
     gfm: true
 });
 
+
+// AJOUTEZ CE CODE DANS app.js pour le menu mobile
+
+// Menu hamburger mobile
+document.addEventListener('DOMContentLoaded', function() {
+    // Créer le bouton hamburger
+    const header = document.querySelector('.header-container');
+    const nav = document.querySelector('.main-nav');
+    
+    if (window.innerWidth <= 768) {
+        // Cacher le menu par défaut sur mobile
+        nav.style.display = 'none';
+        
+        // Créer bouton hamburger
+        const hamburger = document.createElement('button');
+        hamburger.className = 'hamburger-menu';
+        hamburger.innerHTML = '☰';
+        hamburger.setAttribute('aria-label', 'Menu');
+        
+        // Insérer avant header-actions
+        const headerActions = document.querySelector('.header-actions');
+        header.insertBefore(hamburger, headerActions);
+        
+        // Toggle menu
+        hamburger.addEventListener('click', function() {
+            if (nav.style.display === 'none' || nav.style.display === '') {
+                nav.style.display = 'flex';
+                hamburger.innerHTML = '✕';
+            } else {
+                nav.style.display = 'none';
+                hamburger.innerHTML = '☰';
+            }
+        });
+        
+        // Fermer le menu quand on clique sur un lien
+        const navLinks = nav.querySelectorAll('a:not(.dropbtn)');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                nav.style.display = 'none';
+                hamburger.innerHTML = '☰';
+            });
+        });
+        
+        // Gérer les dropdowns sur mobile
+        const dropdown = document.querySelector('.dropdown');
+        const dropbtn = document.querySelector('.dropbtn');
+        
+        if (dropdown && dropbtn) {
+            dropbtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                dropdown.classList.toggle('active');
+            });
+        }
+    }
+    
+    // Réafficher le menu sur desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            nav.style.display = 'flex';
+        } else {
+            nav.style.display = 'none';
+        }
+    });
+});

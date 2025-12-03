@@ -884,3 +884,305 @@ body {
         height: 400px;
     }
 }
+
+/* Header mobile */
+@media (max-width: 768px) {
+    .header {
+        padding: 0.75rem 0;
+    }
+    
+    .header-container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .logo {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .logo h1 {
+        font-size: 1.25rem;
+    }
+    
+    .logo .tagline {
+        font-size: 0.7rem;
+    }
+    
+    /* Menu hamburger */
+    .main-nav {
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        padding: 0.5rem;
+    }
+    
+    .main-nav a {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+    }
+    
+    .main-nav a:hover {
+        background: var(--bg-tertiary);
+    }
+    
+    /* Dropdown mobile */
+    .dropdown-content {
+        position: static;
+        display: none;
+        box-shadow: none;
+        border: none;
+        margin-top: 0.5rem;
+        background: var(--bg-tertiary);
+    }
+    
+    .dropdown.active .dropdown-content {
+        display: block;
+    }
+    
+    .dropdown-content a {
+        padding: 0.5rem 1.5rem;
+    }
+    
+    /* Bouton theme */
+    .header-actions {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+}
+
+/* Layout mobile */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    /* Vue d'accueil */
+    #homeView {
+        padding: 1rem 0;
+    }
+    
+    .hero-section {
+        padding: 2rem 0;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 1.75rem;
+        line-height: 1.3;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    /* Grille de cours */
+    .courses-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .course-card {
+        padding: 1.25rem;
+    }
+    
+    .course-card h3 {
+        font-size: 1.125rem;
+    }
+    
+    .course-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+/* Vue cours mobile */
+@media (max-width: 768px) {
+    #courseView {
+        display: block;
+    }
+    
+    /* Sidebar mobile - En haut */
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        overflow-y: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+    }
+    
+    .sidebar-header {
+        padding: 1rem;
+    }
+    
+    .course-title {
+        font-size: 1.125rem;
+    }
+    
+    .week-item {
+        padding: 0.75rem 1rem;
+    }
+    
+    /* Contenu principal */
+    .content-area {
+        padding: 1rem;
+        max-width: 100%;
+    }
+    
+    .course-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .week-title {
+        font-size: 1.25rem;
+    }
+    
+    /* Progress bar */
+    .progress-container {
+        width: 100%;
+    }
+    
+    /* Sections */
+    .section-header {
+        padding: 0.75rem;
+        flex-wrap: wrap;
+    }
+    
+    .section-header label {
+        font-size: 0.95rem;
+    }
+    
+    /* Code blocks */
+    .code-container {
+        margin: 1rem 0;
+    }
+    
+    .code-content pre {
+        font-size: 0.8rem;
+        padding: 1rem;
+        overflow-x: auto;
+    }
+}
+
+/* Communauté mobile */
+@media (max-width: 768px) {
+    .community-section,
+    .about-section {
+        padding: 2rem 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .section-description {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .community-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .community-card {
+        padding: 1.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+}
+
+/* Popup mobile */
+@media (max-width: 768px) {
+    .popup-content {
+        width: 95%;
+        max-height: 90vh;
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .popup-content h2 {
+        font-size: 1.25rem;
+    }
+    
+    .popup-content p {
+        font-size: 0.9rem;
+    }
+    
+    .popup-content iframe {
+        height: 400px;
+    }
+    
+    .popup-close {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+}
+
+/* Touch improvements */
+@media (max-width: 768px) {
+    /* Augmenter les zones de touche */
+    button,
+    a,
+    .week-item,
+    .section-header {
+        min-height: 44px;
+    }
+    
+    /* Améliorer le scroll */
+    body {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Désactiver le zoom sur les inputs */
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+}
+
+/* Bouton hamburger - AJOUTEZ DANS styles.css */
+
+.hamburger-menu {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    padding: 0.5rem;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+}
+
+@media (max-width: 768px) {
+    .hamburger-menu {
+        display: block;
+    }
+    
+    .logo {
+        margin-left: 3rem;
+    }
+}
