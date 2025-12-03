@@ -19,7 +19,21 @@
     </script>
 </head>
 
-
+<nav class="main-nav">
+    <a href="#" onclick="showHomeView(); return false;">Accueil</a>
+    <div class="dropdown">
+        <a href="#" class="dropbtn">Formations ▼</a>
+        <div class="dropdown-content">
+            <a href="#" onclick="openCourseByName('python-bootcamp'); return false;">Python DataProud</a>
+            <a href="#" onclick="openCourseByName('sql-bootcamp'); return false;">SQL DataProud</a>
+            <a href="#" onclick="openCourseByName('powerbi-bootcamp'); return false;">Power BI</a>
+            <a href="#" onclick="openCourseByName('python-projects'); return false;">Projets Python</a>
+        </div>
+    </div>
+    <a href="#communaute">Communauté</a>
+    <a href="#apropos">À propos</a>
+    <a href="#" onclick="openCalendly(); return false;" class="rdv-link">📅 Prendre RDV</a>
+</nav>
 
 <body class="light-mode">
     <!-- Header -->
@@ -119,6 +133,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
     <script src="app.js"></script>
+
+    <button id="helpButton" class="help-floating-btn" onclick="openCalendly()" title="Besoin d'aide ?">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    <span>Aide</span>
+</button>
+
+<!-- 3. MODAL CALENDLY (à ajouter à la fin de index.html, avant </body>) -->
+
+<div id="calendlyModal" class="calendly-modal">
+    <div class="calendly-modal-content">
+        <button class="calendly-close" onclick="closeCalendly()">&times;</button>
+        <h2>Réserver une session d'accompagnement</h2>
+        <p>Besoin d'aide ? Réservez un créneau pour une session personnalisée.</p>
+        <div id="calendlyEmbed"></div>
+    </div>
+</div>
+
+
+<script src="https://assets.calendly.com/assets/external/widget.js"></script>
+<script>
+function openCalendly() {
+    const modal = document.getElementById('calendlyModal');
+    const embed = document.getElementById('calendlyEmbed');
+    
+    modal.style.display = 'flex';
+    
+    // Remplacez par votre URL Calendly
+    if (!embed.hasChildNodes()) {
+        Calendly.initInlineWidget({
+            url: 'https://calendly.com/adjeguedeaime/30min',
+            parentElement: embed,
+            prefill: {},
+            utm: {}
+        });
+    }
+}
+
+function closeCalendly() {
+    document.getElementById('calendlyModal').style.display = 'none';
+}
+</script>
+
+
 </body>
 </html>
 
